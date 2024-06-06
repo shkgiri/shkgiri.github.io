@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPF Return Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        input[type="number"] {
+            width: 100px;
+            padding: 8px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PPF Return Calculator</h1>
+
+        <label for="principal">Principal Amount:</label>
+        <input type="number" id="principal" value="100000" min="1">
+
+        <label for="years">Number of Years:</label>
+        <input type="number" id="years" value="15" min="1">
+
+        <button onclick="calculatePPF()">Calculate</button>
+
+        <div id="result"></div>
+
+        <script>
+            function calculatePPF() {
+                let principal = parseFloat(document.getElementById('principal').value);
+                let years = parseInt(document.getElementById('years').value);
+                let interestRate = 0.075; // Current PPF interest rate (subject to change)
+
+                let amount = principal * Math.pow((1 + interestRate), years);
+                let maturityValue = amount.toFixed(2);
+
+                document.getElementById('result').innerHTML = `Maturity Value: ₹${maturityValue}`;
+            }
+        </script>
+    </div>
+</body>
+</html>
