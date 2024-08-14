@@ -1,0 +1,163 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Cobalt Strike", "label": "Cobalt Strike", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Domain Fronting", "label": "Domain Fronting", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Sudo and Sudo Caching", "label": "Sudo and Sudo Caching", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Code Signing", "label": "Code Signing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "JavaScript", "label": "JavaScript", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Remote Desktop Protocol", "label": "Remote Desktop Protocol", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Native API", "label": "Native API", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Pass the Hash", "label": "Pass the Hash", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Domain Accounts", "label": "Domain Accounts", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Indicator Removal from Tools", "label": "Indicator Removal from Tools", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Bypass User Account Control", "label": "Bypass User Account Control", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "System Network Configuration Discovery", "label": "System Network Configuration Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Service Execution", "label": "Service Execution", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Data from Local System", "label": "Data from Local System", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Disable or Modify Tools", "label": "Disable or Modify Tools", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Dynamic-link Library Injection", "label": "Dynamic-link Library Injection", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Keylogging", "label": "Keylogging", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "BITS Jobs", "label": "BITS Jobs", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Process Hollowing", "label": "Process Hollowing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Software Discovery", "label": "Software Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Local Accounts", "label": "Local Accounts", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Internal Proxy", "label": "Internal Proxy", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Exploitation for Privilege Escalation", "label": "Exploitation for Privilege Escalation", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Screen Capture", "label": "Screen Capture", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Process Argument Spoofing", "label": "Process Argument Spoofing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Modify Registry", "label": "Modify Registry", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Domain Groups", "label": "Domain Groups", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "System Network Connections Discovery", "label": "System Network Connections Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Protocol Impersonation", "label": "Protocol Impersonation", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Parent PID Spoofing", "label": "Parent PID Spoofing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Token Impersonation/Theft", "label": "Token Impersonation/Theft", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Windows Service", "label": "Windows Service", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Visual Basic", "label": "Visual Basic", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Process Injection", "label": "Process Injection", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "System Service Discovery", "label": "System Service Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Timestomp", "label": "Timestomp", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "File and Directory Discovery", "label": "File and Directory Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "DNS", "label": "DNS", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Scheduled Transfer", "label": "Scheduled Transfer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Local Groups", "label": "Local Groups", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "PowerShell", "label": "PowerShell", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "SSH", "label": "SSH", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Reflective Code Loading", "label": "Reflective Code Loading", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Remote System Discovery", "label": "Remote System Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "LSASS Memory", "label": "LSASS Memory", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Query Registry", "label": "Query Registry", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Domain Account", "label": "Domain Account", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Data Transfer Size Limits", "label": "Data Transfer Size Limits", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Network Service Discovery", "label": "Network Service Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Network Share Discovery", "label": "Network Share Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Web Protocols", "label": "Web Protocols", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Asymmetric Cryptography", "label": "Asymmetric Cryptography", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Browser Session Hijacking", "label": "Browser Session Hijacking", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Deobfuscate/Decode Files or Information", "label": "Deobfuscate/Decode Files or Information", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Protocol Tunneling", "label": "Protocol Tunneling", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Windows Remote Management", "label": "Windows Remote Management", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Symmetric Cryptography", "label": "Symmetric Cryptography", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Non-Application Layer Protocol", "label": "Non-Application Layer Protocol", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Standard Encoding", "label": "Standard Encoding", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Ingress Tool Transfer", "label": "Ingress Tool Transfer", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "SMB/Windows Admin Shares", "label": "SMB/Windows Admin Shares", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Rundll32", "label": "Rundll32", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "File Transfer Protocols", "label": "File Transfer Protocols", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Python", "label": "Python", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Windows Management Instrumentation", "label": "Windows Management Instrumentation", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Security Account Manager", "label": "Security Account Manager", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Make and Impersonate Token", "label": "Make and Impersonate Token", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Exploitation for Client Execution", "label": "Exploitation for Client Execution", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Distributed Component Object Model", "label": "Distributed Component Object Model", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Process Discovery", "label": "Process Discovery", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Office Template Macros", "label": "Office Template Macros", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Windows Command Shell", "label": "Windows Command Shell", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Obfuscated Files or Information", "label": "Obfuscated Files or Information", "shape": "dot", "size": 10}]);
+                  edges = new vis.DataSet([{"ID": 5, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Domain Fronting", "type": "relationship", "width": 1}, {"ID": 34, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Sudo and Sudo Caching", "type": "relationship", "width": 1}, {"ID": 48, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Code Signing", "type": "relationship", "width": 1}, {"ID": 401, "from": "Cobalt Strike", "relationship_type": "uses", "to": "JavaScript", "type": "relationship", "width": 1}, {"ID": 528, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Remote Desktop Protocol", "type": "relationship", "width": 1}, {"ID": 532, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Native API", "type": "relationship", "width": 1}, {"ID": 838, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Pass the Hash", "type": "relationship", "width": 1}, {"ID": 873, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Domain Accounts", "type": "relationship", "width": 1}, {"ID": 931, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Indicator Removal from Tools", "type": "relationship", "width": 1}, {"ID": 1032, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Bypass User Account Control", "type": "relationship", "width": 1}, {"ID": 1033, "from": "Cobalt Strike", "relationship_type": "uses", "to": "System Network Configuration Discovery", "type": "relationship", "width": 1}, {"ID": 1198, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Service Execution", "type": "relationship", "width": 1}, {"ID": 1957, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Data from Local System", "type": "relationship", "width": 1}, {"ID": 2027, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Disable or Modify Tools", "type": "relationship", "width": 1}, {"ID": 2053, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Dynamic-link Library Injection", "type": "relationship", "width": 1}, {"ID": 2365, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Keylogging", "type": "relationship", "width": 1}, {"ID": 2477, "from": "Cobalt Strike", "relationship_type": "uses", "to": "BITS Jobs", "type": "relationship", "width": 1}, {"ID": 2731, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Process Hollowing", "type": "relationship", "width": 1}, {"ID": 2892, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Software Discovery", "type": "relationship", "width": 1}, {"ID": 3240, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Local Accounts", "type": "relationship", "width": 1}, {"ID": 3573, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Internal Proxy", "type": "relationship", "width": 1}, {"ID": 3622, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Exploitation for Privilege Escalation", "type": "relationship", "width": 1}, {"ID": 3643, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Screen Capture", "type": "relationship", "width": 1}, {"ID": 3652, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Process Argument Spoofing", "type": "relationship", "width": 1}, {"ID": 3867, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Modify Registry", "type": "relationship", "width": 1}, {"ID": 4187, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Domain Groups", "type": "relationship", "width": 1}, {"ID": 4241, "from": "Cobalt Strike", "relationship_type": "uses", "to": "System Network Connections Discovery", "type": "relationship", "width": 1}, {"ID": 4549, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Protocol Impersonation", "type": "relationship", "width": 1}, {"ID": 4655, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Parent PID Spoofing", "type": "relationship", "width": 1}, {"ID": 4859, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Token Impersonation/Theft", "type": "relationship", "width": 1}, {"ID": 4999, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Windows Service", "type": "relationship", "width": 1}, {"ID": 5015, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Visual Basic", "type": "relationship", "width": 1}, {"ID": 5275, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Process Injection", "type": "relationship", "width": 1}, {"ID": 5345, "from": "Cobalt Strike", "relationship_type": "uses", "to": "System Service Discovery", "type": "relationship", "width": 1}, {"ID": 5435, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Timestomp", "type": "relationship", "width": 1}, {"ID": 5734, "from": "Cobalt Strike", "relationship_type": "uses", "to": "File and Directory Discovery", "type": "relationship", "width": 1}, {"ID": 5897, "from": "Cobalt Strike", "relationship_type": "uses", "to": "DNS", "type": "relationship", "width": 1}, {"ID": 6084, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Scheduled Transfer", "type": "relationship", "width": 1}, {"ID": 6392, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Local Groups", "type": "relationship", "width": 1}, {"ID": 6447, "from": "Cobalt Strike", "relationship_type": "uses", "to": "PowerShell", "type": "relationship", "width": 1}, {"ID": 6574, "from": "Cobalt Strike", "relationship_type": "uses", "to": "SSH", "type": "relationship", "width": 1}, {"ID": 6793, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Reflective Code Loading", "type": "relationship", "width": 1}, {"ID": 7163, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Remote System Discovery", "type": "relationship", "width": 1}, {"ID": 7303, "from": "Cobalt Strike", "relationship_type": "uses", "to": "LSASS Memory", "type": "relationship", "width": 1}, {"ID": 7924, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Query Registry", "type": "relationship", "width": 1}, {"ID": 8058, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Domain Account", "type": "relationship", "width": 1}, {"ID": 8539, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Data Transfer Size Limits", "type": "relationship", "width": 1}, {"ID": 8544, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Network Service Discovery", "type": "relationship", "width": 1}, {"ID": 8980, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Network Share Discovery", "type": "relationship", "width": 1}, {"ID": 9094, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Web Protocols", "type": "relationship", "width": 1}, {"ID": 9117, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Asymmetric Cryptography", "type": "relationship", "width": 1}, {"ID": 9658, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Browser Session Hijacking", "type": "relationship", "width": 1}, {"ID": 9851, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Deobfuscate/Decode Files or Information", "type": "relationship", "width": 1}, {"ID": 10149, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Protocol Tunneling", "type": "relationship", "width": 1}, {"ID": 10935, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Windows Remote Management", "type": "relationship", "width": 1}, {"ID": 11041, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Symmetric Cryptography", "type": "relationship", "width": 1}, {"ID": 11129, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Non-Application Layer Protocol", "type": "relationship", "width": 1}, {"ID": 11285, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Standard Encoding", "type": "relationship", "width": 1}, {"ID": 11442, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Ingress Tool Transfer", "type": "relationship", "width": 1}, {"ID": 11741, "from": "Cobalt Strike", "relationship_type": "uses", "to": "SMB/Windows Admin Shares", "type": "relationship", "width": 1}, {"ID": 11766, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Rundll32", "type": "relationship", "width": 1}, {"ID": 11991, "from": "Cobalt Strike", "relationship_type": "uses", "to": "File Transfer Protocols", "type": "relationship", "width": 1}, {"ID": 12024, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Python", "type": "relationship", "width": 1}, {"ID": 12078, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Windows Management Instrumentation", "type": "relationship", "width": 1}, {"ID": 12148, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Security Account Manager", "type": "relationship", "width": 1}, {"ID": 12206, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Make and Impersonate Token", "type": "relationship", "width": 1}, {"ID": 12239, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Exploitation for Client Execution", "type": "relationship", "width": 1}, {"ID": 12414, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Distributed Component Object Model", "type": "relationship", "width": 1}, {"ID": 13047, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Process Discovery", "type": "relationship", "width": 1}, {"ID": 13549, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Office Template Macros", "type": "relationship", "width": 1}, {"ID": 13843, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Windows Command Shell", "type": "relationship", "width": 1}, {"ID": 13945, "from": "Cobalt Strike", "relationship_type": "uses", "to": "Obfuscated Files or Information", "type": "relationship", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.3,
+            "damping": 0.09,
+            "nodeDistance": 200,
+            "springConstant": 0.05,
+            "springLength": 100
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
