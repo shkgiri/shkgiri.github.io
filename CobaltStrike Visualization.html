@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cobalt Strike Visualization</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .gif-container {
+            margin: 20px 0;
+        }
+        .code-container {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 5px;
+            width: 100%;
+            max-width: 800px;
+            overflow-x: auto;
+        }
+        pre {
+            margin: 0;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cobalt Strike Visualization</h1>
+        <div class="gif-container">
+            <img src="CS.gif" alt="Cobalt Strike Visualization">
+        </div>
+        <h2>Python Code</h2>
+        <div class="code-container">
+            <pre><code>
+import pandas as pd
+import json
+import networkx as nx
+from pyvis.network import Network
+from IPython.core.display import HTML
+
+# Load the JSON data
+with open('enterprise-attack.json') as f:
+    data = json.load(f)
+
+df10 = pd.DataFrame(data['objects'])
+df12 = df10[df10['type'] == 'attack-pattern']
+df13 = df12[['type', 'id', 'name']]
+df13.reset_index(drop=True, inplace=True)
+df13.rename(columns={'id': 'target_ref'}, inplace=True)
+
+# Target table
+mrnList = ['malware', 'intrusion-set', 'campaign']
+df01 = pd.DataFrame(data['objects'])
+df02 = df01[df01['type'].isin(mrnList)]
+df03 = df02[['type', 'id', 'target_ref', 'name']]
+df03.reset_index(drop=True, inplace=True)
+df03.rename(columns={'id': 'source_ref'}, inplace=True)
+
+# Final Table with "uses" as relationship type
+df = pd.DataFrame(data['objects'])
+df2 = df[df['type'] == 'relationship']
+df3 = df2[['type', 'source_ref', 'target_ref', 'relationship_type']]
+df4 = df3[df3['relationship_type'] == 'uses']
+df5 = df4.reset_index(drop=True)  # Uses DataFrame
+
+# Merge source_ref with name
+merged_df = pd.merge(df5, df03, on='source_ref', how='left')
+df5['source_ref'] = merged_df['name']
+
+# Merge target_ref with name
+merged_df2 = pd.merge(df5, df13, on='target_ref', how='left')
+df5['target_ref'] = merged_df2['name']
+df5['ID'] = df5.index + 1
+
+# Convert source_ref and target_ref to strings
+df5['source_ref'] = df5['source_ref'].astype(str)
+df5['target_ref'] = df5['target_ref'].astype(str)
+
+# Filter DataFrame to only include relationships where source_ref is 'Cobalt Strike'
+df_cobalt_strike = df5[df5['source_ref'] == 'Cobalt Strike']
+
+# Check if the filtered DataFrame is not empty
+if not df_cobalt_strike.empty:
+    # Create a graph from the filtered DataFrame
+    G = nx.from_pandas_edgelist(df_cobalt_strike, 'source_ref', 'target_ref', edge_attr=True)
+
+    # Convert NetworkX graph G to PyVis network
+    net = Network(notebook=True)  # Set notebook=True for Jupyter notebooks
+    net.from_nx(G)
+
+    # Save and display the graph
+    net.show("networkx-pyvis.html")
+else:
+    print("No relationships found with source_ref as 'Cobalt Strike'.")
+            </code></pre>
+        </div>
+    </div>
+</body>
+</html>
